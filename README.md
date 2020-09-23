@@ -2,7 +2,7 @@
 
 ## Description
 - This is demo project that implements furigana (ruby) feature on Godot Engine.
-- これは、Godot Engine上でフリガナ（ルビ）機能を実装したサンプルプロジェクトです。
+- これは、Godot Engine上でフリガナ（ルビ）機能を実装したデモプロジェクトです。
 
 ## Font
 - This demo project uses Noto Sans JP font (Licensed under OFL : [https://fonts.google.com/specimen/Noto+Sans+JP#license]([https://fonts.google.com/specimen/Noto+Sans+JP#license)).
