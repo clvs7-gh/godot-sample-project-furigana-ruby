@@ -14,7 +14,14 @@
 ## Screenshot
 - `"ただ、所々%ruby{丹塗,にぬり}の%ruby{剥,は}げた、\n大きな%ruby{円柱,まるばしら}に、\n%ruby{蟋蟀,きりぎりす}が一匹とまっている"` will be transformed into like this:
 
-![](./screenshot.png)
+##### Left-Top
+![](./screenshot_lt.png)
+##### Center-Center
+![](./screenshot_cc.png)
+##### Right-Bottom
+![](./screenshot_rb.png)
+##### Center-Fill
+![](./screenshot_cf.png)
 
 ## License
 CC0 (Public Domain)
