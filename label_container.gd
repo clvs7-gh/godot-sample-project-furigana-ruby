@@ -55,13 +55,25 @@ func apply():
 		# メッセージ
 		var m_text: String = m_label.text
 		var m_size: Vector2 = m_font.get_string_size(m_text)
+		var m_text_lines: Array = m_text.split("\n")
+		m_size.y += m_size.y * (m_text_lines.size() - 1)
+		var _li = 0
+		# ルビの存在する行
+		var m_text_line: String = m_text_lines[_li]
+		var _lidx: int = m_text_line.length()
+		while _lidx < ruby.t_idx:
+			_li += 1
+			m_text_line = m_text_lines[_li]
+			_lidx += m_text_line.length() + 1
+		var m_text_line_size: Vector2 = m_font.get_string_size(m_text_line)
 		# メッセージのうち、テキスト直前までのもの
 		var m_pre_text: String = m_text.substr(0, ruby.t_idx)
 		var m_pre_size: Vector2 = m_font.get_string_size(m_pre_text)
-		# メッセージのテキスト直前までのもののうち、改行を含むもの
 		var m_pre_nl_count: int = m_pre_text.count("\n")
+		m_pre_size.y += m_pre_size.y * m_pre_nl_count
+		# メッセージのテキスト直前までのもののうち、改行以降のもの
 		var m_pre_after_nl_idx: int = m_pre_text.find_last("\n")
-		var m_pre_after_nl_size: Vector2 = m_font.get_string_size(m_pre_text.substr(m_pre_after_nl_idx)) if m_pre_after_nl_idx >= 0 else m_pre_size
+		var m_pre_after_nl_size: Vector2 = m_font.get_string_size(m_pre_text.substr(m_pre_after_nl_idx + 1)) if m_pre_after_nl_idx >= 0 else m_pre_size
 
 		# ルビ長が対象より短い場合、スペースを入れて埋める
 		if r_size.x < t_size.x:
@@ -70,7 +82,23 @@ func apply():
 			
 		# いい感じにルビ位置を設定する
 		# SPACING/SPACING_EXTRAでルビ位置を微調整している
-		var r_pos: Vector2 = Vector2(int(m_pre_after_nl_size.x) % int(m_label.rect_size.x), m_size.y * m_pre_nl_count + SPACING - r_size.y + SPACING_EXTRA * m_pre_nl_count)
+		var x_spacing: float = 0
+		match (m_label.align):
+			Label.ALIGN_CENTER:
+				x_spacing = (m_label.rect_size.x - m_text_line_size.x) / 2
+			Label.ALIGN_RIGHT:
+				x_spacing = (m_label.rect_size.x - m_text_line_size.x)
+		var y_spacing: float = 0
+		match (m_label.valign):
+			Label.VALIGN_CENTER:
+				y_spacing = (m_label.rect_size.y - m_size.y) / 2
+			Label.VALIGN_BOTTOM:
+				y_spacing = (m_label.rect_size.y - m_size.y)
+			Label.VALIGN_FILL:
+				y_spacing += ((m_label.rect_size.y - m_size.y) / (m_text_lines.size() - 1)) * m_pre_nl_count
+		var r_pos_x: float = x_spacing + (int(m_pre_after_nl_size.x) % int(m_label.rect_size.x))
+		var r_pos_y: float = y_spacing + (m_text_line_size.y * m_pre_nl_count + SPACING - r_size.y + SPACING_EXTRA * m_pre_nl_count)
+		var r_pos: Vector2 = Vector2(r_pos_x, r_pos_y)
 		r_pos.x += (t_size.x - r_size.x) / 2
 		r_label.rect_position = r_pos
 		r_label.visible = true
